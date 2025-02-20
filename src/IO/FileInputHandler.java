@@ -9,6 +9,7 @@ public class FileInputHandler {
   private Integer N, M, P;
   private String S;
   private ArrayList<Block> blocks = new ArrayList<>();
+  private static String available_type = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   
   public FileInputHandler(String filename) {
     File f = new File(filename);
@@ -90,7 +91,7 @@ public class FileInputHandler {
 
         if (line.trim().charAt(0) != current_block_type){
           // create a block from block_lines
-          blocks.add(new Block(block_lines));
+          addBlock(block_lines);
 
           // clear block_lines
           block_lines.clear();
@@ -100,13 +101,16 @@ public class FileInputHandler {
 
         // add the line to block_lines
         // validate
+        if (!isValidBlockType(current_block_type)){
+          throw new Exception("Block type must be from A-Z");
+        }
         if (!isSameBlockType(line, current_block_type)){
           throw new Exception("Block type must be same for all characters in line");
         }
           block_lines.add(line);
       }
     // create the last block
-    blocks.add(new Block(block_lines));
+    addBlock(block_lines);
 
     } catch (Exception e) {
       System.out.println("Error: " + e.getMessage());
@@ -120,7 +124,26 @@ public class FileInputHandler {
 
     
   }
+
+  private void addBlock(ArrayList<String> block_lines){
+    if (isTypeAvailable(block_lines) && blocks.size() < P){
+      blocks.add(new Block(block_lines));
+    }
+  }
+
   // Validator
+
+  // check whether the block type is valid (unused)
+  public static boolean isTypeAvailable(ArrayList<String> block_lines){
+    // check whether the block type is available
+    char block_type = block_lines.get(0).charAt(0);
+    if (available_type.indexOf(block_type) != -1){
+      // delete the type from available_type
+      available_type = available_type.replace(String.valueOf(block_type), "");
+      return true;
+    }
+    return false;
+  }
 
   // valid block type
   public static boolean isValidBlockType(char block_type){
