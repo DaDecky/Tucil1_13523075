@@ -1,11 +1,35 @@
 # Tucil1_13523075
 
-# TODO
+<!--
+README yang minimal berisi:
+Penjelasan singkat program yang dibuat.
+Requirement program dan instalasi tertentu bila ada.
+Cara mengkompilasi program bila perlu dikompilasi.
+Cara menjalankan dan menggunakan program.
+Author / identitas pembuat.
+ -->
 
-- [] handle empty line in input.txt
-- [x] fix
-      FFF
-      FFF
-      F F
-      Error: Block type must be same for all characters in line
-- [ ] handle jumlah block yang diberikan lebih atau kurang dari specified P
+Program untuk menyelesaikan permainan IQ Puzzle Pro dengan algoritma Brute Force
+
+# Requirement
+
+- Java 23
+
+# How to Run
+
+### Powershell
+
+```pwsh
+./run.ps1
+```
+
+### Bash
+
+```sh
+chmod +x ./run.sh
+./run.sh
+```
+
+# Authors
+
+Muhammad Dicky Isra - 13523075
