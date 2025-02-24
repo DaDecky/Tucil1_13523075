@@ -27,7 +27,7 @@ Program untuk menyelesaikan permainan IQ Puzzle Pro dengan algoritma Brute Force
 
 ```sh
 chmod +x ./run.sh
-./run.sh
+./run.sh {Filename}
 ```
 
 # Authors
