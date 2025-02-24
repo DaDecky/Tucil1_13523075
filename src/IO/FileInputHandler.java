@@ -10,31 +10,29 @@ public class FileInputHandler {
   private String S;
   private ArrayList<Block> blocks = new ArrayList<>();
   private static String available_type = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  
+
   public FileInputHandler(String filename) {
     File f = new File(filename);
     // check whether file exist
-    if (!f.exists()){
+    if (!f.exists()) {
       System.out.println("Error: File " + filename + " does not exist");
       System.exit(1);
     }
-    
+
     // Check first line whether in format of "N M P"
-    try (Scanner sc = new Scanner(f)){
+    try (Scanner sc = new Scanner(f)) {
       // split based on single or multiple spaces
       String[] line_1 = sc.nextLine().split("\\s+");
-      if (line_1.length != 3){
+      if (line_1.length != 3) {
         throw new Exception("First line must be in format of 'N M P'");
       }
 
       // validate line array are all integers
-      for (String s : line_1){
-        if (!s.matches("\\d+")){
+      for (String s : line_1) {
+        if (!s.matches("\\d+")) {
           throw new Exception("First line must be in format of 'N M P'");
         }
-      } 
-
-
+      }
 
       // store N, M, P
       N = Integer.valueOf(line_1[0]);
@@ -44,52 +42,51 @@ public class FileInputHandler {
       // validate N,M,P
       // N,M bigger than 0
       // P bigger than 0 and less than or equal to 26
-      if (N <= 0 || M <= 0 || P <= 0 || P > 26){
+      if (N <= 0 || M <= 0 || P <= 0 || P > 26) {
         throw new Exception("Condition Not Met N, M, P > 0 and P <= 26");
       }
-      
+
       // check whether line 2 is DEFAULT/CUSTOM/PYRAMID
-      if (sc.hasNextLine()){
+      if (sc.hasNextLine()) {
         S = sc.nextLine().trim();
-        if (!S.equals("DEFAULT") && !S.equals("CUSTOM") && !S.equals("PYRAMID")){
+        if (!S.equals("DEFAULT") && !S.equals("CUSTOM") && !S.equals("PYRAMID")) {
           throw new Exception("Second line must be either DEFAULT/CUSTOM/PYRAMID");
         }
       } else {
         throw new Exception("Second line must be either DEFAULT/CUSTOM/PYRAMID");
       }
 
-      //  Get all blocks
+      // Get all blocks
       char current_block_type;
       String line;
-      ArrayList<String> block_lines = new ArrayList<>();  
+      ArrayList<String> block_lines = new ArrayList<>();
 
-      if (sc.hasNextLine()){
+      if (sc.hasNextLine()) {
         line = sc.nextLine();
         current_block_type = line.trim().charAt(0);
-        
+
         // check whether block type is valid and all characters are the same
-        if (!isValidBlockType(current_block_type)){
+        if (!isValidBlockType(current_block_type)) {
           throw new Exception("Block type must be from A-Z");
         }
 
-        if (!isSameBlockType(line, current_block_type)){
+        if (!isSameBlockType(line, current_block_type)) {
           throw new Exception("Block type must be same for all characters in line");
         }
 
         // add the line to block_lines
         block_lines.add(line);
-      }
-      else{
+      } else {
         throw new Exception("No block lines found");
       }
 
       // get the rest of the same type of block_lines, then create a block
       // repeat until no more new blocks
 
-      while (sc.hasNextLine()){
+      while (sc.hasNextLine()) {
         line = sc.nextLine();
 
-        if (line.trim().charAt(0) != current_block_type){
+        if (line.trim().charAt(0) != current_block_type) {
           // create a block from block_lines
           addBlock(block_lines);
 
@@ -101,32 +98,28 @@ public class FileInputHandler {
 
         // add the line to block_lines
         // validate
-        if (!isValidBlockType(current_block_type)){
+        if (!isValidBlockType(current_block_type)) {
           throw new Exception("Block type must be from A-Z");
         }
-        if (!isSameBlockType(line, current_block_type)){
+        if (!isSameBlockType(line, current_block_type)) {
           throw new Exception("Block type must be same for all characters in line");
         }
-          block_lines.add(line);
+        block_lines.add(line);
       }
-    // create the last block
-    addBlock(block_lines);
+      // create the last block
+      addBlock(block_lines);
 
     } catch (Exception e) {
       System.out.println("Error: " + e.getMessage());
       System.exit(1);
     }
 
-
-
-
     // System.out.println("N: " + this.N + " M: " + this.M + " P: " + this.P);
 
-    
   }
 
-  private void addBlock(ArrayList<String> block_lines){
-    if (isTypeAvailable(block_lines) && blocks.size() < P){
+  private void addBlock(ArrayList<String> block_lines) {
+    if (isTypeAvailable(block_lines) && blocks.size() < P) {
       blocks.add(new Block(block_lines));
     }
   }
@@ -134,36 +127,31 @@ public class FileInputHandler {
   // Validator
 
   // check whether the block type is valid (unused)
-  public static boolean isTypeAvailable(ArrayList<String> block_lines){
+  public static boolean isTypeAvailable(ArrayList<String> block_lines) {
     // check whether the block type is available
-    char block_type = block_lines.get(0).charAt(0);
-    if (available_type.indexOf(block_type) != -1){
-      // delete the type from available_type
-      available_type = available_type.replace(String.valueOf(block_type), "");
-      return true;
-    }
-    return false;
+    char block_type = block_lines.get(0).trim().charAt(0);
+    return available_type.indexOf(block_type) != -1;
   }
 
   // valid block type
-  public static boolean isValidBlockType(char block_type){
-    // check whether from A-Z, not checking the availability of the block only for the type
-    return block_type >= 65 && block_type <= 90;
+  public static boolean isValidBlockType(char block_type) {
+    // check whether from A-Z, not checking the availability of the block only for
+    // the type
+    return block_type >= 65 && block_type <= 90 || block_type == 32;
+    // return true;
   }
 
+  public static boolean isSameBlockType(String line, char block_type) {
+    // remove all spaces
+    line = line.replaceAll("\\s", "");
 
-  public static boolean isSameBlockType(String line, char block_type){
-    // trim whitespace
-    line = line.trim();
-    
-    for (int i = 0; i < line.length(); i++){
-      if (line.charAt(i) != block_type){
+    for (int i = 0; i < line.length(); i++) {
+      if (line.charAt(i) != block_type) {
         return false;
       }
     }
     return true;
   }
-
 
   // Getters
 
@@ -178,14 +166,12 @@ public class FileInputHandler {
   public Integer getP() {
     return P;
   }
+
   public String getS() {
     return S;
   }
 
-  public ArrayList<Block> getBlocks(){
+  public ArrayList<Block> getBlocks() {
     return this.blocks;
   }
 }
-
-
-
