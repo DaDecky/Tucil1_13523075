@@ -1,3 +1,3 @@
 #!/bin/sh
 javac -d bin src/*.java src/game/*.java src/IO/*.java
-java -cp bin Main
+java -cp bin Main "$1"
