@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        FileInputHandler f = new FileInputHandler("input.txt");
+        FileInputHandler f = new FileInputHandler(args.length > 0 ? "./test/" + args[0] : "./test/test_1.txt");
 
         Integer N, M, P;
         String S;

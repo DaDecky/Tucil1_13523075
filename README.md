@@ -20,7 +20,7 @@ Program untuk menyelesaikan permainan IQ Puzzle Pro dengan algoritma Brute Force
 ### Powershell
 
 ```pwsh
-./run.ps1
+./run.ps1 {Filename}
 ```
 
 ### Bash
